@@ -7,8 +7,8 @@ Version=9.85
 Sub Class_Globals
 	Private Root As B4XView
 	Private xui As XUI
-	Private lblIP As Label
-	Private lblStatus As Label
+	Private lblIP As B4XView
+	Private lblStatus As B4XView
 	Private ImageView1 As ImageView
 	Private server As ServerSocket
 	Private astream As AsyncStreams
@@ -21,7 +21,7 @@ End Sub
 Private Sub B4XPage_Created (Root1 As B4XView)
 	Root = Root1
 	Root.LoadLayout("1")
-	B4XPages.SetTitle(Me, "CCTV")
+	B4XPages.SetTitle(Me, "CCTV Viewer")
 	server.Initialize(17178, "server")
 	server.Listen
 	lblIP.Text = "My IP: " & server.GetMyIP
@@ -32,6 +32,7 @@ Sub Server_NewConnection (Successful As Boolean, NewSocket As Socket)
 		If astream.IsInitialized Then astream.Close
 		astream.InitializePrefix(NewSocket.InputStream, False, NewSocket.OutputStream, "astream")
 		lblStatus.Text = "Status: Connected"
+		lblStatus.TextColor = xui.Color_RGB(65, 105, 225)
 	Else
 		Log(LastException)
 	End If
@@ -56,4 +57,6 @@ End Sub
 
 Sub astream_Terminated
 	lblStatus.Text = "Status: Disconnected"
+	lblStatus.TextColor = xui.Color_RGB(220, 20, 60)
+	ImageView1.SetImage(Null)
 End Sub
